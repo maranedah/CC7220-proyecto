@@ -1,0 +1,13 @@
+SELECT ?name ?language_name ?origin_name ?coordinates
+WHERE {
+  ?country wdt:P361 wd:Q12585 .
+  ?country wdt:P31 wd:Q6256 ;
+  rdfs:label ?name .
+  ?country wdt:P2936 ?language .
+  ?language rdfs:label ?language_name .
+  OPTIONAL {?language wdt:P625 ?coordinates }
+  OPTIONAL {?language wdt:P2341 ?origin . ?origin rdfs:label ?origin_name}
+  FILTER(lang(?name)='en')
+  FILTER(lang(?language_name)='en')
+  FILTER(lang(?origin_name)='en')
+}
