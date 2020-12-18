@@ -1,11 +1,11 @@
-#defaultView:Map{"hide":["?country_name", "?geometry", "?coordinates", "?continent_name"], "layer": ["?language_name", "?n_speakers"]}
+#defaultView:Map{"hide":["?country_name", "?geometry", "?coordinates", "?continent_name"], "layer": ["?danger_label"]}
 
 PREFIX geo: <http://www.opengis.net/ont/geosparql#>
 PREFIX lgdo: <http://linkedgeodata.org/ontology/>
 PREFIX geom: <http://geovocab.org/geomtry#>
 PREFIX bif: <bif:>
 
-SELECT ?country_name ?language_name ?origin_name ?coordinates ?continent_name ?n_speakers
+SELECT ?country_name ?language_name ?origin_name ?coordinates ?continent_name ?n_speakers ?danger_label
 WHERE {
   ?country wdt:P361 ?continent .
   ?continent wdt:P31 wd:Q5107 ;
@@ -14,6 +14,8 @@ WHERE {
   rdfs:label ?country_name .
   ?country wdt:P2936 ?language .
   ?language rdfs:label ?language_name .
+  ?language wdt:P3823 ?danger_state .
+  ?danger_state rdfs:label ?danger_label .
   OPTIONAL {?language wdt:P1098 ?n_speakers }
   OPTIONAL {?language wdt:P625 ?coordinates }
   OPTIONAL {?language wdt:P2341 ?origin . ?origin rdfs:label ?origin_name}
@@ -21,6 +23,7 @@ WHERE {
   FILTER(lang(?language_name)='en')
   FILTER(lang(?continent_name)='en')
   FILTER(lang(?origin_name)='en')
+  FILTER(lang(?danger_label)='en')
   FILTER(NOT EXISTS {
     ?language wdt:P17 ?country_2 .
     ?country_2 wdt:P361 wd:Q46 .
