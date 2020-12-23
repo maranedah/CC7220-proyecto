@@ -1,0 +1,19 @@
+# Estado de las lenguas
+SELECT ?danger_name 
+(COUNT(?language) as ?count)
+WHERE {
+  ?country wdt:P361 ?continent .
+  {?country wdt:P361 wd:Q18} UNION {?country wdt:P361 wd:Q49} .
+  ?continent wdt:P31 wd:Q5107 .
+  ?country wdt:P31 wd:Q6256 .
+  ?country wdt:P2936 ?language .
+  ?language wdt:P3823 ?danger_state .
+  ?danger_state rdfs:label ?danger_name .
+  FILTER(lang(?danger_name)='en')
+  FILTER(NOT EXISTS {
+    ?language wdt:P17 ?country_2 .
+    ?country_2 wdt:P361 wd:Q46 .
+  })
+}
+GROUP BY ?danger_name
+ORDER BY ?danger_name 
