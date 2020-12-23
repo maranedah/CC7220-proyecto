@@ -1,4 +1,4 @@
-#defaultView:Map{"hide":["?country_name", "?geometry", "?coordinates", "?continent_name"], "layer": ["?danger_label"]}
+#defaultView:Map{"hide":["?country_name", "?continent_name"], "layer": ["?danger_label"]}
 
 PREFIX geo: <http://www.opengis.net/ont/geosparql#>
 PREFIX lgdo: <http://linkedgeodata.org/ontology/>
@@ -11,13 +11,17 @@ WHERE {
   ?continent wdt:P31 wd:Q5107 ;
              rdfs:label ?continent_name .
   ?country wdt:P31 wd:Q6256 ;
-  rdfs:label ?country_name .
+             rdfs:label ?country_name .
   ?country wdt:P2936 ?language .
+  {?country wdt:P361 wd:Q18} UNION {?country wdt:P361 wd:Q49} .
   ?language rdfs:label ?language_name .
+  
   ?language wdt:P3823 ?danger_state .
   ?danger_state rdfs:label ?danger_label .
+  
   OPTIONAL {?language wdt:P1098 ?n_speakers }
   OPTIONAL {?language wdt:P625 ?coordinates }
+  
   OPTIONAL {?language wdt:P2341 ?origin . ?origin rdfs:label ?origin_name}
   FILTER(lang(?country_name)='en')
   FILTER(lang(?language_name)='en')
@@ -26,6 +30,6 @@ WHERE {
   FILTER(lang(?danger_label)='en')
   FILTER(NOT EXISTS {
     ?language wdt:P17 ?country_2 .
-    ?country_2 wdt:P361 wd:Q46 .
+    {?country_2 wdt:P361 wd:Q46} UNION {?country_2 wdt:P361 wd:Q458} .
   })
 }
