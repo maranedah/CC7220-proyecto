@@ -23,7 +23,7 @@ WHERE {
   FILTER(lang(?continent_name)='en')
   #Quitar lenguajes que se hablen en Europa (o Union Europea)
   FILTER(NOT EXISTS {
-    ?language wdt:P17 ?country_2 .
+    ?country_2 wdt:P2936 ?language .
     {?country_2 wdt:P361 wd:Q46} UNION {?country_2 wdt:P361 wd:Q458} .
   })
   ?language wdt:P1846 ?distribution
