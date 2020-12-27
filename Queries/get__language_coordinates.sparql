@@ -1,28 +1,31 @@
-#defaultView:Map{"hide":["?country_name", "?geometry", "?coordinates", "?continent_name"], "layer": ["?language_name", "?n_speakers"]}
+##Base
+#defaultView:Map{"hide": ["?coordinates"], "layer": ["?language_name"]}
 
-PREFIX geo: <http://www.opengis.net/ont/geosparql#>
-PREFIX lgdo: <http://linkedgeodata.org/ontology/>
-PREFIX geom: <http://geovocab.org/geomtry#>
-PREFIX bif: <bif:>
-
-SELECT ?country_name ?language_name ?origin_name ?coordinates ?continent_name ?n_speakers
+SELECT ?language_name ?coordinates
 WHERE {
+  #Base
+  #Country pertenece a un continente
   ?country wdt:P361 ?continent .
+  #Se habla un lenguaje
+  ?country wdt:P2936 ?language .
+  #Solo puede ser de America del sur o del norte
+  {?country wdt:P361 wd:Q18} UNION {?country wdt:P361 wd:Q49} .
+  #Nombres
   ?continent wdt:P31 wd:Q5107 ;
              rdfs:label ?continent_name .
   ?country wdt:P31 wd:Q6256 ;
-  rdfs:label ?country_name .
-  ?country wdt:P2936 ?language .
+             rdfs:label ?country_name .
   ?language rdfs:label ?language_name .
-  OPTIONAL {?language wdt:P1098 ?n_speakers }
-  OPTIONAL {?language wdt:P625 ?coordinates }
-  OPTIONAL {?language wdt:P2341 ?origin . ?origin rdfs:label ?origin_name}
+  #Coordenadas del lenguaje
+  OPTIONAL {?language wdt:P625 ?coordinates}
+  #Filtros de nombre
   FILTER(lang(?country_name)='en')
   FILTER(lang(?language_name)='en')
   FILTER(lang(?continent_name)='en')
-  FILTER(lang(?origin_name)='en')
+  #Quitar lenguajes que se hablen en Europa (o Union Europea)
   FILTER(NOT EXISTS {
     ?language wdt:P17 ?country_2 .
-    ?country_2 wdt:P361 wd:Q46 .
+    {?country_2 wdt:P361 wd:Q46} UNION {?country_2 wdt:P361 wd:Q458} .
   })
+  #Agregar extras aca abajo
 }

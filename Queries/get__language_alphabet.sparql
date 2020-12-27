@@ -1,6 +1,6 @@
-#defaultView:Map{"hide": ["?coordinates"], "layer": ["?language_state"]}
+#defaultView:Map{"hide": ["?coordinates"], "layer": ["?writing_system_name"]}
 
-SELECT ?language_name ?coordinates ?language_state
+SELECT ?language_name ?coordinates ?writing_system_name
 WHERE {
   #Base
   #Country pertenece a un continente
@@ -26,7 +26,8 @@ WHERE {
     ?language wdt:P17 ?country_2 .
     {?country_2 wdt:P361 wd:Q46} UNION {?country_2 wdt:P361 wd:Q458} .
   })
-  ?language wdt:P3823 ?language_danger .
-  ?language_danger rdfs:label ?language_state .
-  FILTER(lang(?language_state)='en')
+  #Agregar extras aca abajo
+  ?language wdt:P282 ?writing_system  .
+  ?writing_system rdfs:label ?writing_system_name .
+  FILTER(lang(?writing_system_name)='en')
 }

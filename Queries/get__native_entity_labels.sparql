@@ -1,0 +1,6 @@
+SELECT *
+WHERE {
+  ?object wdt:P31 wd:Q35120 .
+  ?object rdfs:label ?label .
+  FILTER(lang(?label) in ('iu', 'cr', 'oj', 'tl', 'gn', 'qu', 'ay', 'nv', 'ik', 'tl'))
+}

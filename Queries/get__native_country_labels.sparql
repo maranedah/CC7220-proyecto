@@ -1,0 +1,11 @@
+SELECT ?english (count(?native_label) as ?native_labels) ?coords
+WHERE {
+  ?object wdt:P31 wd:Q6256 .
+  ?object wdt:P625 ?coords .
+  ?object rdfs:label ?native_label .
+  ?object rdfs:label ?english .
+  FILTER(lang(?native_label) in ('iu', 'cr', 'oj', 'tl', 'gn', 'qu', 'ay', 'nv', 'ik', 'tl'))
+  FILTER(lang(?english)='en')
+}
+GROUP BY ?english ?coords
+ORDER BY DESC (?native_labels)

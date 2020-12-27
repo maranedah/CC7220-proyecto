@@ -1,0 +1,8 @@
+SELECT ?english ?native_label
+WHERE {
+  wd:Q298 rdfs:label ?native_label .
+  wd:Q298 rdfs:label ?english .
+  FILTER(lang(?native_label) in ('iu', 'cr', 'oj', 'tl', 'gn', 'qu', 'ay', 'nv', 'ik', 'tl'))
+  FILTER(lang(?english)='en')
+}
+ORDER BY DESC (?native_labels)

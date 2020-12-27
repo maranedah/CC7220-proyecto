@@ -1,6 +1,6 @@
-#defaultView:Map{"hide": ["?coordinates"], "layer": ["?language_state"]}
+#view:ImageGrid{"hide": ["?coordinates"], "layer": ["?writing_system_name"]}
 
-SELECT ?language_name ?coordinates ?language_state
+SELECT ?language_name ?coordinates ?distribution
 WHERE {
   #Base
   #Country pertenece a un continente
@@ -16,7 +16,7 @@ WHERE {
              rdfs:label ?country_name .
   ?language rdfs:label ?language_name .
   #Coordenadas del lenguaje
-  OPTIONAL {?language wdt:P625 ?coordinates}
+  OPTIONAL{?language wdt:P625 ?coordinates}
   #Filtros de nombre
   FILTER(lang(?country_name)='en')
   FILTER(lang(?language_name)='en')
@@ -26,7 +26,7 @@ WHERE {
     ?language wdt:P17 ?country_2 .
     {?country_2 wdt:P361 wd:Q46} UNION {?country_2 wdt:P361 wd:Q458} .
   })
-  ?language wdt:P3823 ?language_danger .
-  ?language_danger rdfs:label ?language_state .
-  FILTER(lang(?language_state)='en')
+  ?language wdt:P1846 ?distribution
+  OPTIONAL {?language wdt:P1098 ?n_speakers}
 }
+ORDER BY DESC(?n_speakers)
