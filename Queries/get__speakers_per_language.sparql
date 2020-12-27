@@ -1,30 +1,3 @@
-#PRESENTACION
-SELECT
-(SUM(?n_speakers) as ?n_speakerss)
-?language_label
-WHERE {
-  ?continent wdt:P31 wd:Q5107 .
-  ?country wdt:P31 wd:Q6256 ;
-             rdfs:label ?country_name .
-  {?country wdt:P361 wd:Q18} UNION {?country wdt:P361 wd:Q49}
-  ?country wdt:P2936 ?language .
-  ?country wdt:P1082 ?n_habitantes .
-  ?language wdt:P1098 ?n_speakers .
-  ?language rdfs:label ?language_label .
-  FILTER(lang(?language_label)='en')
-  FILTER(lang(?country_name)='en')
-  FILTER(NOT EXISTS {
-    {?country_2 wdt:P30 wd:Q46 } UNION {?country_2 wdt:P361 wd:Q458} UNION {?country_2 wdt:P30 wd:Q48} .
-     ?country_2 wdt:P2936 ?language .
-  })
-}
-GROUP BY ?language_label
-HAVING(?n_speakerss > 100000)
-ORDER BY DESC (?n_speakerss)
-LIMIT 20
-
-
-#MEJOR
 SELECT ?language_name (SUM (?speakers) as ?total_speakers)
 WHERE {
   #Base
@@ -49,7 +22,7 @@ WHERE {
   #Quitar lenguajes que se hablen en Europa (o Union Europea)
   FILTER(NOT EXISTS {
     ?country_2 wdt:P2936 ?language .
-    {?country_2 wdt:P361 wd:Q46} UNION {?country_2 wdt:P361 wd:Q458} .
+    {?country_2 wdt:P361 wd:Q46} UNION {?country_2 wdt:P361 wd:Q458} UNION {?country_2 wdt:P30 wd:Q48} .
   })
 
   ?language wdt:P1098 ?speakers .
